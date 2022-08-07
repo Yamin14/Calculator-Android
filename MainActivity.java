@@ -86,122 +86,127 @@ public class MainActivity extends AppCompatActivity {
                 Stack<String> operators = new Stack<>();
                 String[] numbers = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."};
                 String str = "";
-                int len;
+                String temp = "";
+                String character;
 
-                for (int i = 0; i < length; i++) {
-                    boolean flag = false;
+                if (expression.equals("")) {
+                    result.setText("");
 
-                    if (i == 0 && (Character.toString(expression.charAt(i)).equals("-") || Character.toString(expression.charAt(i)).equals("+"))) {
-                        str = str + Character.toString(expression.charAt(i));
-                        flag = true;
-                    } else {
-                        if (Character.toString(expression.charAt(i)).equals("-") || Character.toString(expression.charAt(i)).equals("+")) {
-                            len = operators.size();
-                            if (operators.elementAt(len-1).equals("×") || operators.elementAt(len-1).equals("÷")) {
-                                str = str + Character.toString(expression.charAt(i));
-                                flag = true;
-                            }
-
-                        }
-                    }
-
-                    for (int j = 0; j <= 10; j++) {
-                        if (numbers[j].equals(Character.toString(expression.charAt(i)))) {
-                            str = str + numbers[j];
-                            flag = true;
-                        }
-                    }
-
-                    if (!flag) {
-                        operators.push(Character.toString(expression.charAt(i)));
-                        operands.push(str);
-                        str = "";
-                    }
-                }
-
-                operands.push(str);
-
-                Stack<String> operands1 = new Stack<>();
-                Stack<String> operators1 = new Stack<>();
-                int size = operands.size();
-                int size1 = operators.size();
-
-                for (int i = 0; i < size; i++) {
-                    operands1.push(operands.pop());
-                }
-                for (int i = 0; i < size1; i++) {
-                    operators1.push(operators.pop());
-                }
-
-                boolean flag1 = true;
-
-                for (int i = 0; i <= 9; i++) {
-                    if (Character.toString(expression.charAt(length-1)).equals(numbers[i])) {
-                        flag1 = true;
-                        break;
-                    } else {
-                        flag1 = false;
-                    }
-                }
-
-                if (Character.toString(expression.charAt(0)).equals("×") || Character.toString(expression.charAt(0)).equals("÷")) {
-                    flag1 = false;
-                }
-
-                if (size>1 && size1 > 0 && flag1) {
-                    //calculation
+                } else {
                     try {
-                        for (int index = 0; index < size1; index++) {
-                            String op1 = operators1.pop();
 
-                            if (op1.equals("+")) {
-                                double x = Double.parseDouble(operands1.pop());
-                                double y = Double.parseDouble(operands1.pop());
-                                double z = x + y;
+                        //getting operators and operands
+                        for (int i = 0; i < length; i++) {
+                            boolean flag = false;
+                            character = Character.toString(expression.charAt(i));
 
-                                operands1.push(Double.toString(z));
+                            if (character.equals("-") || character.equals("+")) {
+                                if (i == 0 || temp.equals("×") || temp.equals("÷")) {
+                                    str = str + character;
+                                    flag = true;
+                                }
                             }
-                            if (op1.equals("-")) {
-                                double x = Double.parseDouble(operands1.pop());
-                                double y = Double.parseDouble(operands1.pop());
-                                double z = x - y;
 
-                                operands1.push(Double.toString(z));
+                            for (int j = 0; j <= 10; j++) {
+                                if (numbers[j].equals(character)) {
+                                    str = str + numbers[j];
+                                    flag = true;
+                                }
                             }
-                            if (op1.equals("×")) {
-                                double x = Double.parseDouble(operands1.pop());
-                                double y = Double.parseDouble(operands1.pop());
-                                double z = x * y;
 
-                                operands1.push(Double.toString(z));
+                            if (!flag) {
+                                operators.push(character);
+                                operands.push(str);
+                                str = "";
                             }
-                            if (op1.equals("÷")) {
-                                double x = Double.parseDouble(operands1.pop());
-                                double y = Double.parseDouble(operands1.pop());
-                                double z = x / y;
 
-                                operands1.push(Double.toString(z));
+                            temp = character;
+                        }
+
+                        operands.push(str);
+
+
+                        Stack<String> operands1 = new Stack<>();
+                        Stack<String> operators1 = new Stack<>();
+                        int size = operands.size();
+                        int size1 = operators.size();
+
+                        for (int i = 0; i < size; i++) {
+                            operands1.push(operands.pop());
+                        }
+                        for (int i = 0; i < size1; i++) {
+                            operators1.push(operators.pop());
+                        }
+
+                        boolean flag1 = true;
+
+                        for (int i = 0; i <= 9; i++) {
+                            if (Character.toString(expression.charAt(length - 1)).equals(numbers[i])) {
+                                flag1 = true;
+                                break;
+                            } else {
+                                flag1 = false;
                             }
                         }
-                        result.setText(operands1.pop());
+
+                        if (Character.toString(expression.charAt(0)).equals("×") || Character.toString(expression.charAt(0)).equals("÷")) {
+                            flag1 = false;
+                        }
+
+                        if (size > 1 && size1 > 0 && flag1) {
+                            //calculation
+                            for (int index = 0; index < size1; index++) {
+                                String op1 = operators1.pop();
+
+                                if (op1.equals("+")) {
+                                    double x = Double.parseDouble(operands1.pop());
+                                    double y = Double.parseDouble(operands1.pop());
+                                    double z = x + y;
+
+                                    operands1.push(Double.toString(z));
+                                }
+                                if (op1.equals("-")) {
+                                    double x = Double.parseDouble(operands1.pop());
+                                    double y = Double.parseDouble(operands1.pop());
+                                    double z = x - y;
+
+                                    operands1.push(Double.toString(z));
+                                }
+                                if (op1.equals("×")) {
+                                    double x = Double.parseDouble(operands1.pop());
+                                    double y = Double.parseDouble(operands1.pop());
+                                    double z = x * y;
+
+                                    operands1.push(Double.toString(z));
+                                }
+                                if (op1.equals("÷")) {
+                                    double x = Double.parseDouble(operands1.pop());
+                                    double y = Double.parseDouble(operands1.pop());
+                                    double z = x / y;
+
+                                    operands1.push(Double.toString(z));
+                                }
+                            }
+                            result.setText(operands1.pop());
+
+
+                        } else {
+                            if (size == 1 && size1 == 0 && flag1) {
+                                String op = operands1.pop();
+                                double floating = Double.parseDouble(op);
+                                result.setText(Double.toString(floating));
+                            } else {
+                                String error = "Invalid Expression";
+                                result.setText(error);
+                            }
+                        }
                     } catch (Exception e) {
                         String error = "Invalid Expression";
                         result.setText(error);
                     }
 
-                } else {
-                    if (size == 1 && size1 == 0 && flag1) {
-                        String op = operands1.pop();
-                        double floating = Double.parseDouble(op);
-                        result.setText(Double.toString(floating));
-                    } else {
-                        String error = "Invalid Expression";
-                        result.setText(error);
-                    }
                 }
-
             }
         });
-
     }
 }
